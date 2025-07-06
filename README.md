@@ -1,2 +1,3 @@
-# dlschool-food-detection-project
-This repository contains project for Deep Learning School. The project is to build a web-service for predicting proteins, fats, carbohydrates given your food
+# Food Energy Prediction
+
+This repository contains project developed while studying at Deep Learning School. The project is a web-service to predict proteins, fats, carbohydrates given image of your food. 
