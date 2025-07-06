@@ -1,0 +1,3 @@
+"""
+Food Detection Backend API
+""" 
