@@ -1,0 +1,44 @@
+services:
+  # Backend Service - Development Mode
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: food-detection-backend-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/requirements.txt:/app/requirements.txt
+      - ./models:/app/models:ro
+    environment:
+      - PYTHONPATH=/app
+      - ENVIRONMENT=development
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    restart: unless-stopped
+    networks:
+      - food-detection-network
+
+  # Frontend Service - Development Mode with Hot Reloading
+  frontend-dev:
+    image: node:20-alpine
+    container_name: food-detection-frontend-dev
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+      - CHOKIDAR_USEPOLLING=true
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - food-detection-network
+
+networks:
+  food-detection-network:
+    driver: bridge 
